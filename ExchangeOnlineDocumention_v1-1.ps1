@@ -1,20 +1,21 @@
-#######################################################################################################################
-###                                                                                                                 ###
-###  	Script by Terry Munro -                                                                                     ###
-###     Technical Blog -               http://365admin.com.au                                                       ###
-###     Webpage -                      https://www.linkedin.com/in/terry-munro/                                     ###
-###     TechNet Gallery Scripts -      http://tinyurl.com/TerryMunroTechNet                                         ###
-###     Version -                      Version 1.1                                                                  ###
-###     Version History                Version 1.0 - 03/12/2017                                                     ###
-###                                    Version 1.1 - 25/03/2018                                                     ###
-###                                                                                                                 ###
-###     Change Log                     Version 1.1 - Added PowerShell variable - to prevent truncation of results   ###
-###                                                                                                                 ###
-###     Support                        http://www.365admin.com.au/2017/12/how-to-create-basic-document-of.html      ###
-###                                                                                                                 ###
-###     Download Link                  https://gallery.technet.microsoft.com/Exchange-Online-Configurati-5c6019b5   ###
-###                                                                                                                 ###
-#######################################################################################################################
+################################################################################################################################
+###                                                                                                                          ###
+###  	Script by Terry Munro -                                                                                              ###
+###     Technical Blog -               http://365admin.com.au                                                                ###
+###     Webpage -                      https://www.linkedin.com/in/terry-munro/                                              ###
+###     GitHub Scripts -               https://github.com/TeamTerry                                                          ###
+###                                                                                                                          ###
+###     GitHub Download link -         https://github.com/TeamTerry/Exchange-Online-Configuration-Documentation-Script       ###
+###     Version -                      Version 1.1                                                                           ###
+###     Version History                Version 1.0 - 03/12/2017                                                              ###
+###                                    Version 1.1 - 25/03/2018                                                              ###
+###                                                                                                                          ###
+###     Change Log                     Version 1.1 - Added PowerShell variable - to prevent truncation of results            ###
+###                                                                                                                          ###
+###     Support                        http://www.365admin.com.au/2017/12/how-to-create-basic-document-of.html               ###
+###                                                                                                                          ###
+###                                                                                                                          ###
+################################################################################################################################
 
 ##############################################################################################################################
 ###                                                                                                                        ###
@@ -65,7 +66,7 @@ Get-RecipientPermission | Where {($_.Trustee -ne 'nt authority\self') } | select
 
 Get-Mailbox -ResultSize Unlimited |  ? {$_.GrantSendOnBehalfTo -ne $null} | select Name,Alias,UserPrincipalName,PrimarySmtpAddress,GrantSendOnBehalfTo | export-csv -NoTypeInformation "$logpath\MailboxSendOnBehalfAccess-EXOnline.csv"
 
-$a = Get-Mailbox $a |Get-MailboxPermission | Where { ($_.IsInherited -eq $False) -and -not ($_.User -like ìNT AUTHORITY\SELFî) -and -not ($_.User -like '*Discovery Management*') } | Select Identity, user | Export-Csv -NoTypeInformation "$logpath\MailboxFullAccess-EXOnline.csv"
+$a = Get-Mailbox $a |Get-MailboxPermission | Where { ($_.IsInherited -eq $False) -and -not ($_.User -like ‚ÄúNT AUTHORITY\SELF‚Äù) -and -not ($_.User -like '*Discovery Management*') } | Select Identity, user | Export-Csv -NoTypeInformation "$logpath\MailboxFullAccess-EXOnline.csv"
 
 
 
@@ -87,9 +88,9 @@ Get-Mailbox -ResultSize Unlimited | Where {($_.ForwardingAddress -ne $Null) -or 
 Get-MsolUser | Where {$_.StrongAuthenticationMethods -ne $null} | foreach {
     ForEach ($entry in $_.StrongAuthenticationMethods) {
         $Data = New-Object PSObject
-        $Data | Add-Member -MemberType NoteProperty ñname UserPrincipalName ñvalue $($_.UserPrincipalName)
-        $Data | Add-Member -MemberType NoteProperty ñname Default ñvalue $($entry.IsDefault)
-        $Data | Add-Member -MemberType NoteProperty ñname MethodType ñvalue $($entry.MethodType)
+        $Data | Add-Member -MemberType NoteProperty ‚Äìname UserPrincipalName ‚Äìvalue $($_.UserPrincipalName)
+        $Data | Add-Member -MemberType NoteProperty ‚Äìname Default ‚Äìvalue $($entry.IsDefault)
+        $Data | Add-Member -MemberType NoteProperty ‚Äìname MethodType ‚Äìvalue $($entry.MethodType)
         #write-output $Data
         $Data | export-csv -NoTypeInformation -append -Path "$logpath\MFA-Users-And-Configuration.csv"
     }
